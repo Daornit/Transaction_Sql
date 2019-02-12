@@ -1,5 +1,6 @@
 # Transaction_Sql 
 Lab1_B:
+
         1. SELECT Reviewer.name, Movie.title, Rating.stars, Rating.ratingDate FROM Rating
         INNER JOIN Movie ON Movie.mID = Rating.mID
         INNER JOIN Reviewer ON Reviewer.rID = Rating.rID
