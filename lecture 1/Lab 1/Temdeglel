@@ -1,0 +1,121 @@
+1. Microsoft SQL ийг Docker дээр суулгав.
+2. Azura Data Studio г Query хийхдээ зориулан суулгав.
+
+Датабайс үүсгэх
+
+CREATE DATABASE TestData GO
+
+Датабайс солих
+
+USE <DataBase Name>
+
+Table үүсгэх
+
+CREATE TABLE dbo.Products  
+   (ProductID int PRIMARY KEY NOT NULL,  
+   ProductName varchar(25) NOT NULL,  
+   Price money NULL,  
+   ProductDescription text NULL)  
+GO
+
+dbo нь нэмэлт элемэнт ба schema гэж дуудагддаг. Schema нь Table ийг эзэмшдэг датабайс обьект юм.
+Хэрвээ та админ бол dbo бол тогтмол schema.
+
+VIEW үүсгэх 
+ 
+CREATE VIEW vw_Names 
+	AS
+	SELECT ProductName, Price FROM Products;
+GO
+
+CREATE STORED PROCEDURE 
+
+Stored Procedure нь input ба output prameter тэй байж болно бас IF, WHILE гэх мэт Code хэтэрхээс сэргийлэх statement үүдийг агуулж чадна.
+
+CREATE PROCEDURE pr_Names @VarPrice money
+	AS
+	BEGIN
+		-- The print statement returns text to the user
+		PRINT 'Products less than ' + CAST(@VarPrice AS varchar(10));
+		-- second Statement starts here
+		SELECT ProductName, Price FROM vw_Names
+			WHERE Price < @varPrice;
+	END
+GO
+
+Prosedure үүсгэхэд Түүний нэр (pr_Names) авах праметер @VarPrice яг ард нь дата төрөл нь тэгээд begin ээс end хүртэл statement үүд нь явна.
+
+STORED PROCEDURE ийг ашиглах 
+
+EXECUTE pr_Names 10.00
+GO
+
+Configure Permission хийх
+
+CREATE LOGIN [computer_name\Mary]
+	FROM WINDOWS
+	WITH DEFAULT_DATABASE = [TestData];
+GO
+
+USE [TestData];
+GO
+
+CREATE USER [Mary] For LOGIN [computer_name\Mary];
+GO
+
+GRANT хэрэглэгчийн эрхийг олгох. 
+
+GRANT EXECUTE | SELECT | CREATE | INSERT | UPDATE ON pr_Names TO Mary;
+GO
+
+REVOKE хэрэглэгчийн эрхийг хураах
+
+REVOKE EXECUTE | SELECT | CREATE | INSERT | UPDATE ON pr_Names TO Mary;
+GO
+
+DROP permission 
+
+DROP USER Mary;
+
+DROP LOGIN [<computer_name>\Mary];
+
+Remove procedure pr_Names
+
+```sql
+DROP PROC pr_Names;
+GO
+```
+
+DROP VIEW vw_Names;
+GO
+
+DELETE FROM Product бүх row бичилтийг устгана.
+
+DROP TABLE Products;
+GO
+
+USE MASTER;
+GO
+
+DROP DATABASE TestData;
+GO
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
